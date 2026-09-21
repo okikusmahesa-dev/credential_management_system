@@ -1,0 +1,27 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: credential-manager-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: credential_manager
+      POSTGRES_USER: credential_app
+      POSTGRES_PASSWORD: credential_dev_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - credential_manager_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U credential_app -d credential_manager"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  credential_manager_pgdata:
+
+DATABASE_URL="postgresql://credential_app:credential_dev_password@localhost:5432/credential_manager?schema=public"

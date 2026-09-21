@@ -1,11 +1,13 @@
 import { $fetch, useRuntimeConfig } from '#imports'
 
+type RequestOptions = NonNullable<Parameters<typeof $fetch>[1]>
+
 export const useApi = () => {
   const config = useRuntimeConfig()
 
   const request = async <T>(
     endpoint: string,
-    options: any = {}
+    options: RequestOptions = {}
     ): Promise<T> => {
     const token = useCookie<string | null>('access_token')
 
@@ -25,7 +27,7 @@ export const useApi = () => {
         })
     }
 
-  const get = <T>(endpoint: string, options: any = {}) => {
+  const get = <T>(endpoint: string, options: RequestOptions = {}) => {
     return request<T>(endpoint, {
       method: 'GET',
       ...options,
@@ -35,7 +37,7 @@ export const useApi = () => {
   const post = <T>(
     endpoint: string,
     body?: unknown,
-    options: any = {}
+    options: RequestOptions = {}
   ) => {
     return request<T>(endpoint, {
       method: 'POST',
@@ -47,7 +49,7 @@ export const useApi = () => {
   const put = <T>(
     endpoint: string,
     body?: unknown,
-    options: any = {}
+    options: RequestOptions = {}
   ) => {
     return request<T>(endpoint, {
       method: 'PUT',
@@ -56,7 +58,7 @@ export const useApi = () => {
     })
   }
 
-  const del = <T>(endpoint: string, options: any = {}) => {
+  const del = <T>(endpoint: string, options: RequestOptions = {}) => {
     return request<T>(endpoint, {
       method: 'DELETE',
       ...options,
@@ -66,7 +68,7 @@ export const useApi = () => {
   const patch = <T>(
   endpoint: string,
   body?: unknown,
-  options: any = {}
+  options: RequestOptions = {}
     ) => {
     return request<T>(endpoint, {
         method: 'PATCH',

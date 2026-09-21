@@ -11,6 +11,11 @@ const password = ref('')
 const loading = ref(false)
 const errorMessage = ref('')
 
+interface ApiError {
+  data?: { message?: string }
+  message?: string
+}
+
 const handleLogin = async () => {
   errorMessage.value = ''
 
@@ -28,10 +33,11 @@ const handleLogin = async () => {
     })
 
     await router.push('/')
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const apiError = error as ApiError
     errorMessage.value =
-      error?.data?.message ||
-      error?.message ||
+      apiError.data?.message ||
+      apiError.message ||
       'Username atau password tidak valid.'
   } finally {
     loading.value = false
